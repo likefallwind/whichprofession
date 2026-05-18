@@ -102,13 +102,9 @@ export default function ScreenPoster({ result, onNav }: { result: ScoreResult; o
                 <div style={{ position: 'absolute', inset: 0, background: 'var(--ink)', borderRadius: 14, transform: 'translate(3px, 4px)' }} />
                 <div style={{
                   position: 'relative', height: 112, background: p.bg, border: '2px solid var(--ink)', borderRadius: 14,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', overflow: 'hidden',
+                  overflow: 'hidden',
                 }}>
-                  <div style={{ position: 'absolute', inset: 6, borderRadius: 10, border: '1.2px dashed rgba(26,34,53,0.35)' }} />
-                  <div style={{ fontSize: 50, lineHeight: 1, position: 'relative' }}>{p.icon}</div>
-                  <div className="h-en" style={{ fontSize: 9.5, color: p.c, marginTop: 4, position: 'relative', fontWeight: 700, letterSpacing: '0.06em' }}>
-                    {p.en.toUpperCase()}
-                  </div>
+                  <img src={p.img} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
                 <div style={{
                   position: 'absolute', top: -10, left: -14, background: 'var(--ink)', color: 'var(--cream)',

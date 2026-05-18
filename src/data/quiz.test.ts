@@ -114,6 +114,13 @@ describe('数据层 · 人格卡 PERSONAS', () => {
     }
   });
 
+  it('每张卡都绑定一张唯一的角色插画', () => {
+    for (const p of PERSONAS) {
+      expect(p.img, `人格 ${p.code} 缺少插画路径`).toMatch(/^\/personas\/\d{2}\.webp$/);
+    }
+    expect(new Set(PERSONAS.map((p) => p.img)).size).toBe(16);
+  });
+
   it('文案不含 MBTI / 最适合 / 命定 等违规词（PRD §13）', () => {
     const banned = ['MBTI', '最适合', '命定'];
     for (const p of PERSONAS) {

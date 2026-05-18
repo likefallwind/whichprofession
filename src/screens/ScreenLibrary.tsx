@@ -51,44 +51,47 @@ export default function ScreenLibrary({ result, onNav }: { result: ScoreResult; 
               <div key={p.code} onClick={() => onNav(isYou ? 'result' : 'locked', { code: p.code })} style={{ position: 'relative', cursor: 'pointer' }}>
                 {isYou && <div style={{ position: 'absolute', inset: 0, background: 'var(--ink)', borderRadius: 12, transform: 'translate(3px, 4px)' }} />}
                 <div style={{
-                  position: 'relative', height: 124, boxSizing: 'border-box',
+                  position: 'relative', boxSizing: 'border-box',
                   background: isYou ? p.bg : 'var(--paper)',
                   border: isYou ? '2px solid var(--ink)' : '1.4px solid rgba(26,34,53,0.25)',
-                  borderRadius: 12, padding: '9px 10px',
-                  display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden',
+                  borderRadius: 12, overflow: 'hidden',
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{
-                      width: 26, height: 26, borderRadius: 7, background: isYou ? '#fff' : 'var(--cream)',
-                      border: '1.4px solid var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15,
-                    }}>{p.icon}</div>
-                    <span className="h-fra" style={{ fontSize: 10.5, color: isYou ? p.c : 'var(--ink-faint)', fontWeight: 900, letterSpacing: '0.04em' }}>
-                      {p.code}
-                    </span>
+                  {/* 角色插画缩略图 */}
+                  <div style={{ position: 'relative', aspectRatio: '16 / 11', overflow: 'hidden', borderBottom: '1.4px solid var(--ink)' }}>
+                    <img src={p.img} alt={p.name} style={{
+                      width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 28%', display: 'block',
+                      filter: isYou ? 'none' : 'grayscale(0.7) opacity(0.55)',
+                    }} />
+                    <span className="h-fra" style={{
+                      position: 'absolute', top: 6, right: 6, fontSize: 10, fontWeight: 900, letterSpacing: '0.04em',
+                      color: isYou ? p.c : 'var(--ink-faint)', background: 'rgba(255,255,255,0.86)',
+                      padding: '1px 5px', borderRadius: 6,
+                    }}>{p.code}</span>
                   </div>
-                  <div>
+                  {/* 信息区 */}
+                  <div style={{ padding: '7px 10px 8px' }}>
                     <div className="h-display" style={{ fontSize: 14.5, color: 'var(--ink)', lineHeight: 1.15 }}>
                       {p.name}
                       {isYou && <Sparkle size={10} color={p.c} style={{ marginLeft: 4, verticalAlign: 'top' }} />}
                     </div>
                     <div style={{ fontSize: 9.5, color: 'var(--ink-soft)', marginTop: 2, lineHeight: 1.4 }}>{p.keywords.slice(0, 2).join(' · ')}</div>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 4 }}>
-                    <div style={{ display: 'flex', gap: 2 }}>
-                      {p.code !== '多线'
-                        ? p.code.split('-').map((l) => <RiasecBadge key={l} letter={l as Letter} size={13} />)
-                        : <Pill size="s" color={p.c} bg={p.bg} border={false} style={{ padding: '1px 6px', fontSize: 9 }}>MULTI</Pill>}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 4, marginTop: 6 }}>
+                      <div style={{ display: 'flex', gap: 2 }}>
+                        {p.code !== '多线'
+                          ? p.code.split('-').map((l) => <RiasecBadge key={l} letter={l as Letter} size={13} />)
+                          : <Pill size="s" color={p.c} bg={p.bg} border={false} style={{ padding: '1px 6px', fontSize: 9 }}>MULTI</Pill>}
+                      </div>
+                      <span className="num-display" style={{ fontSize: 11, color: p.c, fontWeight: 800 }}>{PCT_MAP[p.code] ?? 5}%</span>
                     </div>
-                    <span className="num-display" style={{ fontSize: 11, color: p.c, fontWeight: 800 }}>{PCT_MAP[p.code] ?? 5}%</span>
                   </div>
-                  {isYou && (
-                    <div style={{
-                      position: 'absolute', top: -7, right: 9, background: 'var(--ink)', color: 'var(--cream)',
-                      padding: '2px 7px', borderRadius: 999, fontSize: 9, fontWeight: 800, letterSpacing: '0.1em',
-                      transform: 'rotate(4deg)',
-                    }}>YOU ✦</div>
-                  )}
                 </div>
+                {isYou && (
+                  <div style={{
+                    position: 'absolute', top: -7, right: 9, background: 'var(--ink)', color: 'var(--cream)',
+                    padding: '2px 7px', borderRadius: 999, fontSize: 9, fontWeight: 800, letterSpacing: '0.1em',
+                    transform: 'rotate(4deg)', zIndex: 2,
+                  }}>YOU ✦</div>
+                )}
               </div>
             );
           })}

@@ -55,25 +55,33 @@ export default function ScreenResult({ result, onNav }: { result: ScoreResult; o
               <span className="num-display" style={{ fontSize: 11, color: 'var(--ink-soft)' }}>{p.en}</span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
+            {/* 角色主视觉大图 */}
+            <div style={{ position: 'relative', marginTop: 8 }}>
+              <img src={p.img} alt={p.name} style={{
+                width: '100%', aspectRatio: '1 / 1', objectFit: 'cover', display: 'block',
+                borderRadius: 14, border: '2px solid var(--ink)', background: '#fff',
+              }} />
               <div style={{
-                width: 62, height: 62, borderRadius: 14, background: '#fff', border: '2px solid var(--ink)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 34,
-              }}>{p.icon}</div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 2 }}>
-                  {p.code !== '多线'
-                    ? p.code.split('-').map((l, i) => (
-                        <Fragment key={i}>
-                          {i > 0 && <span style={{ color: 'var(--ink-soft)', fontWeight: 800 }}>·</span>}
-                          <RiasecBadge letter={l as Letter} size={22} />
-                        </Fragment>
-                      ))
-                    : <Pill size="s" color={p.c}>未来多面手</Pill>}
-                  <span className="h-en" style={{ fontSize: 12, color: 'var(--ink-soft)', marginLeft: 4 }}>{p.code}</span>
-                </div>
-                <div className="h-display" style={{ fontSize: 24, lineHeight: 1.1, color: 'var(--ink)' }}>{p.name}</div>
+                position: 'absolute', top: -8, left: 10, background: 'var(--ink)', color: 'var(--cream)',
+                fontSize: 9, fontWeight: 800, letterSpacing: '0.14em', padding: '3px 9px',
+                borderRadius: 999, transform: 'rotate(-6deg)',
+              }}>YOU ✦</div>
+            </div>
+
+            {/* 角色信息行 */}
+            <div style={{ marginTop: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 2 }}>
+                {p.code !== '多线'
+                  ? p.code.split('-').map((l, i) => (
+                      <Fragment key={i}>
+                        {i > 0 && <span style={{ color: 'var(--ink-soft)', fontWeight: 800 }}>·</span>}
+                        <RiasecBadge letter={l as Letter} size={22} />
+                      </Fragment>
+                    ))
+                  : <Pill size="s" color={p.c}>未来多面手</Pill>}
+                <span className="h-en" style={{ fontSize: 12, color: 'var(--ink-soft)', marginLeft: 4 }}>{p.code}</span>
               </div>
+              <div className="h-display" style={{ fontSize: 27, lineHeight: 1.1, color: 'var(--ink)' }}>{p.name}</div>
             </div>
 
             <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
