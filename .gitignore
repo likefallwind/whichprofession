@@ -3,4 +3,5 @@ dist
 dist-ssr
 *.local
 .vite
+.run
 .DS_Store

@@ -14,8 +14,21 @@ npm install
 npm run dev        # 本地开发 http://localhost:5173
 npm run build      # 类型检查 + 生产构建
 npm run preview    # 预览生产构建
-npm run test       # 算法单元测试（vitest）
+npm run test       # 单元测试（vitest，63 个用例）
 ```
+
+### 服务器管理脚本
+
+`run.sh` 封装了开发服务器的启停：
+
+```bash
+./run.sh start     # 启动（已在运行则不重复启动）
+./run.sh stop      # 停止所有本项目的服务实例（含历史遗留的多个进程）
+./run.sh restart   # 重启
+./run.sh status    # 查看运行状态
+```
+
+`stop` 会同时按 PID 文件和工作目录扫描，能把之前多次启动遗留的所有实例一并清理干净。
 
 ## 流程（8 屏）
 
@@ -29,6 +42,16 @@ npm run test       # 算法单元测试（vitest）
 - `src/screens/` — 8 屏页面
 - `src/App.tsx` — 屏幕状态机
 - `design-reference/` — Claude Design 导出的原始设计稿存档
+
+## 测试
+
+`npm run test` 运行 63 个单元测试（vitest + Testing Library），覆盖：
+
+- **数据层**（`data/quiz.test.ts`）—— 18 题 / 16 人格 / 50 大类的结构与引用完整性、合规词检查
+- **打分算法**（`lib/score.test.ts`）—— PRD §8 主干 + 三处修订 + 边缘场景（空/部分作答、规范序、确定性）
+- **屏幕状态机**（`App.test.tsx`）—— 双选答题、取消、自动进题、上一题、答满 18 题
+- **8 屏组件**（`screens/screens.test.tsx`）—— 渲染冒烟与导航交互
+- **基础组件**（`components/components.test.tsx`）—— atoms 与 doodles
 
 ## 合规
 
