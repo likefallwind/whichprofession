@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>未来专业人格卡 H5 · 高保真设计</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;700;900&family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Caveat:wght@500;700&family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* WARM CREAM (default) */
+    --bg:        #E9DCC3;
+    --cream:     #F4E9D2;
+    --paper:     #FBF4E0;
+    --ink:       #2A2218;
+    --ink-soft:  #7A6A52;
+    --ink-faint: #B5A687;
+    --primary:   #E96B3C;
+    --primary-deep:#C24A1F;
+    --primary-soft:#FBD8C5;
+    --accent:    #4A6FA5;
+    --green:     #6B8E4E;
+    --pink:      #E89BAA;
+    --yellow:    #F4C84A;
+    --line:      #2A2218;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    font-family: 'Noto Sans SC', 'PingFang SC', system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  #root { width: 100vw; height: 100vh; }
+
+  /* tiny paper texture using gradient noise — overlay on phone bg */
+  .paper-grain {
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(176,148,103,0.06) 0, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(176,148,103,0.05) 0, transparent 40%),
+      radial-gradient(circle at 50% 90%, rgba(176,148,103,0.04) 0, transparent 40%);
+  }
+  .h-display { font-family: 'Noto Serif SC', serif; font-weight: 900; letter-spacing: -0.01em; }
+  .h-script  { font-family: 'Ma Shan Zheng', cursive; }
+  .h-en      { font-family: 'Caveat', cursive; }
+  .h-fra     { font-family: 'Fraunces', serif; }
+  .num-display{ font-family: 'Fraunces', serif; font-weight: 900; font-variant-numeric: tabular-nums; }
+  *::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body style="background-color: rgb(71, 103, 148)">
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="doodles.jsx"></script>
+<script type="text/babel" src="quiz-bank.jsx"></script>
+<script type="text/babel" src="screens.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>

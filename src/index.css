@@ -1,0 +1,52 @@
+:root {
+  /* 科技蓝 (Tech Blue) — the single product theme */
+  --bg:          #D9E1EC;
+  --cream:       #EDF1F7;
+  --paper:       #F8FAFD;
+  --ink:         #1A2235;
+  --ink-soft:    #5A6680;
+  --ink-faint:   #9AA4BC;
+  --primary:     #2E5BE5;
+  --primary-deep:#1A3FB0;
+  --primary-soft:#C9D7FA;
+  --accent:      #E96B3C;
+  --green:       #1F8A5B;
+  --pink:        #E89BAA;
+  --yellow:      #F4C84A;
+  --line:        #1A2235;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  font-family: 'Noto Sans SC', 'PingFang SC', system-ui, sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  width: 100vw;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* tiny paper texture using gradient noise */
+.paper-grain {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(90,102,128,0.06) 0, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(90,102,128,0.05) 0, transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(90,102,128,0.04) 0, transparent 40%);
+}
+
+.h-display { font-family: 'Noto Serif SC', serif; font-weight: 900; letter-spacing: -0.01em; }
+.h-script  { font-family: 'Ma Shan Zheng', cursive; }
+.h-en      { font-family: 'Caveat', cursive; }
+.h-fra     { font-family: 'Fraunces', serif; }
+.num-display { font-family: 'Fraunces', serif; font-weight: 900; font-variant-numeric: tabular-nums; }
+
+*::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
