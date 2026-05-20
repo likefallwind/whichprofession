@@ -13,6 +13,11 @@ PID_FILE="$RUN_DIR/server.pids"
 LOG_FILE="$RUN_DIR/server.log"
 PORT="${PORT:-5173}"
 
+if [[ ! "$PORT" =~ ^[0-9]+$ ]]; then
+  echo "PORT 必须是数字，当前值：$PORT" >&2
+  exit 1
+fi
+
 # 找出所有属于本项目的 vite 进程 pid
 # 三重判定：① 可执行文件必须是 node（排除恰好命令行含 "vite" 的 shell）
 #           ② 工作目录在本项目内  ③ 命令行确为 vite 服务器
@@ -34,6 +39,26 @@ find_pids() {
   done
 }
 
+current_url() {
+  awk '/Local:/ { print $3 }' "$LOG_FILE" 2>/dev/null | tail -n 1
+}
+
+port_in_use() {
+  ss -ltnH "sport = :$1" 2>/dev/null | grep -q .
+}
+
+find_free_port() {
+  local candidate="$PORT"
+  while [[ "$candidate" -le 65535 ]]; do
+    if ! port_in_use "$candidate"; then
+      echo "$candidate"
+      return 0
+    fi
+    candidate=$((candidate + 1))
+  done
+  return 1
+}
+
 # 收集需要清理的进程组 ID（来源：pid 文件 + 实时扫描）
 collect_pgids() {
   local p pid pgid
@@ -47,29 +72,40 @@ collect_pgids() {
 }
 
 start() {
+  local chosen_port url
   mkdir -p "$RUN_DIR"
   if [[ -n "$(find_pids)" ]]; then
-    echo "✓ 服务已在运行： http://localhost:$PORT"
+    url="$(current_url)"
+    [[ -n "$url" ]] || url="http://localhost:$PORT"
+    echo "✓ 服务已在运行： $url"
     echo "  如需重启： $0 restart"
     return 0
   fi
+  chosen_port="$(find_free_port)" || {
+    echo "✗ 从 $PORT 到 65535 没有可用端口" >&2
+    return 1
+  }
   : > "$LOG_FILE"
+  : > "$PID_FILE"
   # setsid 让服务进程自成会话/进程组，便于 stop 时整组清理
-  setsid bash -c "cd '$PROJECT_DIR' && exec npm run dev" >> "$LOG_FILE" 2>&1 &
+  setsid bash -c 'cd "$1" && exec npm run dev -- --host 0.0.0.0 --port "$2" --strictPort' _ "$PROJECT_DIR" "$chosen_port" >> "$LOG_FILE" 2>&1 &
   local pid=$!
   echo "$pid" >> "$PID_FILE"
 
   # 等待就绪（最多 ~20s）
   local i
   for i in $(seq 1 40); do
-    if grep -q "ready in" "$LOG_FILE" 2>/dev/null; then
-      echo "✓ 启动成功： http://localhost:$PORT"
+    if grep -Eq '^[[:space:]]*VITE v[0-9][^[:space:]]*[[:space:]]+ready in ' "$LOG_FILE" 2>/dev/null; then
+      url="$(current_url)"
+      [[ -n "$url" ]] || url="http://localhost:$chosen_port"
+      echo "✓ 启动成功： $url"
       echo "  日志： $LOG_FILE"
       return 0
     fi
     if ! kill -0 "$pid" 2>/dev/null && [[ -z "$(find_pids)" ]]; then
       echo "✗ 启动失败，日志末尾："
       tail -n 15 "$LOG_FILE"
+      rm -f "$PID_FILE"
       return 1
     fi
     sleep 0.5
@@ -108,10 +144,12 @@ stop() {
 }
 
 status() {
-  local pids
+  local pids url
   pids="$(find_pids)"
   if [[ -n "$pids" ]]; then
-    echo "● 运行中 (pid: $(echo "$pids" | tr '\n' ' '))  http://localhost:$PORT"
+    url="$(current_url)"
+    [[ -n "$url" ]] || url="http://localhost:$PORT"
+    echo "● 运行中 (pid: $(echo "$pids" | tr '\n' ' '))  $url"
   else
     echo "○ 未运行"
   fi
