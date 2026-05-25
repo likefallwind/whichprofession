@@ -50,3 +50,31 @@ html, body {
 
 *::-webkit-scrollbar { display: none; }
 * { scrollbar-width: none; }
+
+/* sticker / pop animation primitives — 与设计稿 BAnimStyles 对齐 */
+@keyframes wp-pop {
+  0%   { transform: scale(0) rotate(-12deg); opacity: 0; }
+  60%  { transform: scale(1.1) rotate(0deg);  opacity: 1; }
+  100% { transform: scale(1) rotate(-3deg);  opacity: 1; }
+}
+@keyframes wp-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+@keyframes wp-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes wp-wobble {
+  0%, 100% { transform: rotate(-2deg); }
+  50%      { transform: rotate(2deg); }
+}
+@keyframes wp-rise {
+  0%   { transform: translateY(40px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+@keyframes wp-burst {
+  0%   { transform: scale(0);   opacity: 0; }
+  40%  {                        opacity: 1; }
+  100% { transform: scale(2.4); opacity: 0; }
+}

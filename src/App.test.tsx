@@ -7,39 +7,39 @@ const click = (t: string | RegExp) => fireEvent.click(screen.getByText(t));
 describe('App 屏幕状态机', () => {
   it('初始展示首页', () => {
     render(<App />);
-    expect(screen.getByText('开始生成我的专业人格卡')).toBeInTheDocument();
+    expect(screen.getByText('开始抽我的人格卡')).toBeInTheDocument();
   });
 
   it('首页 → 题前说明', () => {
     render(<App />);
-    click('开始生成我的专业人格卡');
-    expect(screen.getByText('我准备好了')).toBeInTheDocument();
+    click('开始抽我的人格卡');
+    expect(screen.getByText('来 抽 第 1 题!')).toBeInTheDocument();
   });
 
   it('题前说明 → 第 1 题', () => {
     render(<App />);
-    click('开始生成我的专业人格卡');
-    click('我准备好了');
+    click('开始抽我的人格卡');
+    click('来 抽 第 1 题!');
     expect(screen.getByText(/第 1 \/ 18 题/)).toBeInTheDocument();
   });
 
   it('答题：选第一项后步骤提示切换、再点同项可取消', () => {
     render(<App />);
-    click('开始生成我的专业人格卡');
-    click('我准备好了');
-    expect(screen.getByText('选你最想负责的一件事')).toBeInTheDocument();
+    click('开始抽我的人格卡');
+    click('来 抽 第 1 题!');
+    expect(screen.getByText(/选「最想做」/)).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('opt-R'));
-    expect(screen.getByText('再选第二想做的一件事')).toBeInTheDocument();
+    expect(screen.getByText(/再选「第二想」/)).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('opt-R')); // 取消
-    expect(screen.getByText('选你最想负责的一件事')).toBeInTheDocument();
+    expect(screen.getByText(/选「最想做」/)).toBeInTheDocument();
   });
 
   it('答题：选满两项后自动进入下一题', () => {
     vi.useFakeTimers();
     try {
       render(<App />);
-      click('开始生成我的专业人格卡');
-      click('我准备好了');
+      click('开始抽我的人格卡');
+      click('来 抽 第 1 题!');
       fireEvent.click(screen.getByTestId('opt-R'));
       fireEvent.click(screen.getByTestId('opt-I'));
       act(() => { vi.advanceTimersByTime(600); });
@@ -53,13 +53,13 @@ describe('App 屏幕状态机', () => {
     vi.useFakeTimers();
     try {
       render(<App />);
-      click('开始生成我的专业人格卡');
-      click('我准备好了');
+      click('开始抽我的人格卡');
+      click('来 抽 第 1 题!');
       fireEvent.click(screen.getByTestId('opt-R'));
       fireEvent.click(screen.getByTestId('opt-I'));
       act(() => { vi.advanceTimersByTime(600); });
       expect(screen.getByText(/第 2 \/ 18 题/)).toBeInTheDocument();
-      click('← 上一题');
+      fireEvent.click(screen.getAllByLabelText('返回')[0]);
       expect(screen.getByText(/第 1 \/ 18 题/)).toBeInTheDocument();
     } finally {
       vi.useRealTimers();
@@ -70,14 +70,14 @@ describe('App 屏幕状态机', () => {
     vi.useFakeTimers();
     try {
       render(<App />);
-      click('开始生成我的专业人格卡');
-      click('我准备好了');
+      click('开始抽我的人格卡');
+      click('来 抽 第 1 题!');
       for (let i = 0; i < 18; i++) {
         fireEvent.click(screen.getByTestId('opt-R'));
         fireEvent.click(screen.getByTestId('opt-I'));
         act(() => { vi.advanceTimersByTime(600); });
       }
-      expect(screen.getByText(/正在比对你的 18 题答案/)).toBeInTheDocument();
+      expect(screen.getByText(/那一张/)).toBeInTheDocument();
     } finally {
       vi.useRealTimers();
     }

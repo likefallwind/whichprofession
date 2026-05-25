@@ -68,9 +68,17 @@ export function PrimaryButton({
   onClick?: () => void;
   disabled?: boolean;
 }) {
+  const innerRef = React.useRef<HTMLDivElement>(null);
+  const press = (pressed: boolean) => {
+    if (disabled || !innerRef.current) return;
+    innerRef.current.style.transform = pressed ? 'translate(2px, 3px)' : 'translate(0, 0)';
+  };
   return (
     <div
       onClick={disabled ? undefined : onClick}
+      onPointerDown={() => press(true)}
+      onPointerUp={() => press(false)}
+      onPointerLeave={() => press(false)}
       style={{
         position: 'relative', display: 'inline-flex',
         cursor: disabled ? 'not-allowed' : onClick ? 'pointer' : 'default',
@@ -78,22 +86,56 @@ export function PrimaryButton({
       }}
     >
       <div style={{ position: 'absolute', inset: 0, background: 'var(--ink)', borderRadius: 999, transform: 'translate(3px, 4px)' }} />
-      <div style={{
-        position: 'relative', background: dark ? 'var(--ink)' : 'var(--primary)',
-        color: dark ? 'var(--cream)' : '#fff',
-        padding: '16px 26px', borderRadius: 999,
-        fontWeight: 800, fontSize: 16, letterSpacing: '0.02em',
-        border: '2px solid var(--ink)',
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-        flex: 1,
-      }}>{children}</div>
+      <div
+        ref={innerRef}
+        style={{
+          position: 'relative', background: dark ? 'var(--ink)' : 'var(--primary)',
+          color: dark ? 'var(--cream)' : '#fff',
+          padding: '16px 26px', borderRadius: 999,
+          fontWeight: 800, fontSize: 16, letterSpacing: '0.02em',
+          border: '2px solid var(--ink)',
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+          flex: 1,
+          transition: 'transform 0.08s ease-out',
+        }}
+      >{children}</div>
     </div>
+  );
+}
+
+// 倾斜的"贴纸"标签 — 与 Pill 共存，更"贴纸感"：粗体 900 + 倾斜 + 描边色填充
+export function Sticker({
+  children, color = 'var(--yellow)', textColor = 'var(--ink)', tilt = -3,
+  size = 'm', style = {},
+}: {
+  children: React.ReactNode;
+  color?: string;
+  textColor?: string;
+  tilt?: number;
+  size?: 's' | 'm' | 'l';
+  style?: React.CSSProperties;
+}) {
+  const sizes = {
+    s: { pad: '3px 9px',  fs: 10 },
+    m: { pad: '6px 12px', fs: 12 },
+    l: { pad: '8px 16px', fs: 14 },
+  } as const;
+  const s = sizes[size];
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center',
+      padding: s.pad, background: color, color: textColor,
+      border: '1.8px solid var(--ink)', borderRadius: 999,
+      fontWeight: 900, fontSize: s.fs, letterSpacing: '0.08em',
+      transform: `rotate(${tilt}deg)`, whiteSpace: 'nowrap', lineHeight: 1.2,
+      ...style,
+    }}>{children}</span>
   );
 }
 
 export function BackBtn({ onClick, bg = 'transparent' }: { onClick?: () => void; bg?: string }) {
   return (
-    <div onClick={onClick} style={{
+    <div onClick={onClick} aria-label="返回" role="button" style={{
       width: 32, height: 32, borderRadius: 999, border: '1.6px solid var(--ink)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
       background: bg, flexShrink: 0,

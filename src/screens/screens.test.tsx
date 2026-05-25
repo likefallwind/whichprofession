@@ -14,8 +14,8 @@ describe('屏幕 · 冒烟与交互', () => {
   it('ScreenLanding 渲染主标题，点 CTA 触发 start', () => {
     const onNav = vi.fn();
     render(<ScreenLanding onNav={onNav} />);
-    expect(screen.getByText('专业大类')).toBeInTheDocument();
-    fireEvent.click(screen.getByText('开始生成我的专业人格卡'));
+    expect(screen.getByText('哪一卡')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('开始抽我的人格卡'));
     expect(onNav).toHaveBeenCalledWith('start');
   });
 
@@ -24,7 +24,7 @@ describe('屏幕 · 冒烟与交互', () => {
     render(<ScreenIntro onNav={onNav} />);
     expect(screen.getByText('每题选两次')).toBeInTheDocument();
     expect(screen.getByText('结果只是探索建议')).toBeInTheDocument();
-    fireEvent.click(screen.getByText('我准备好了'));
+    fireEvent.click(screen.getByText('来 抽 第 1 题!'));
     expect(onNav).toHaveBeenCalledWith('start');
   });
 
@@ -39,14 +39,14 @@ describe('屏幕 · 冒烟与交互', () => {
 
   it('ScreenGenerating（静态）渲染且不崩溃', () => {
     render(<ScreenGenerating live={false} onNav={vi.fn()} />);
-    expect(screen.getByText(/正在比对你的 18 题答案/)).toBeInTheDocument();
+    expect(screen.getByText(/那一张/)).toBeInTheDocument();
   });
 
   it('ScreenResult 渲染人格卡、两周任务与免责声明', () => {
     const onNav = vi.fn();
     render(<ScreenResult result={DEMO_RESULT} onNav={onNav} />);
     expect(screen.getByText(DEMO_RESULT.persona.name)).toBeInTheDocument();
-    expect(screen.getByText(/两周体验任务/)).toBeInTheDocument();
+    expect(screen.getByText(/给你的两周任务/)).toBeInTheDocument();
     expect(screen.getByText(/不要误解/)).toBeInTheDocument();
     fireEvent.click(screen.getByText('查看完整专业报告'));
     expect(onNav).toHaveBeenCalledWith('majors');
@@ -64,8 +64,8 @@ describe('屏幕 · 冒烟与交互', () => {
   it('ScreenMajors 渲染三段报告，点按钮触发 poster', () => {
     const onNav = vi.fn();
     render(<ScreenMajors result={DEMO_RESULT} onNav={onNav} />);
-    expect(screen.getByText('优先探索 · 适配度最高')).toBeInTheDocument();
-    expect(screen.getByText('可以继续了解 · 相关方向')).toBeInTheDocument();
+    expect(screen.getByText('01 · 优先探索')).toBeInTheDocument();
+    expect(screen.getByText('02 · 可以继续了解')).toBeInTheDocument();
     expect(screen.getByText('注意事项')).toBeInTheDocument();
     fireEvent.click(screen.getByText('领取完整报告'));
     expect(onNav).toHaveBeenCalledWith('poster');
@@ -73,13 +73,13 @@ describe('屏幕 · 冒烟与交互', () => {
 
   it('ScreenLibrary 渲染 16 张卡且高亮用户人格', () => {
     render(<ScreenLibrary result={DEMO_RESULT} onNav={vi.fn()} />);
-    expect(screen.getByText('16 张未来专业人格卡')).toBeInTheDocument();
+    expect(screen.getByText('16 张大图鉴')).toBeInTheDocument();
     expect(screen.getByText('YOU ✦')).toBeInTheDocument();
   });
 
   it('ScreenPoster 渲染海报，点保存切换文案', () => {
     render(<ScreenPoster result={DEMO_RESULT} onNav={vi.fn()} />);
-    expect(screen.getAllByText('未来专业人格卡').length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/未来专业人格卡/).length).toBeGreaterThan(0);
     fireEvent.click(screen.getByText('保存图片'));
     expect(screen.getByText('已保存到相册')).toBeInTheDocument();
   });
